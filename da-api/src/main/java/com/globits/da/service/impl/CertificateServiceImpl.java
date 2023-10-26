@@ -42,7 +42,7 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     public List<CertificateDto> getAll() {
-        return certificateRepository.getAllCertificate();
+        return certificateRepository.getAll();
     }
 
     @Override

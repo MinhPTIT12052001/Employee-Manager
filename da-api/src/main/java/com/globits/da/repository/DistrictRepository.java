@@ -18,7 +18,8 @@ public interface DistrictRepository extends JpaRepository<District, UUID> {
             "AND entity.province.id = :provinceId ")
     Boolean isExistByName(@Param("districtName")String districtName,
                           @Param("provinceId") UUID provinceId);
-
     @Query("select new com.globits.da.dto.DistrictDto(d) from District d where d.province.id = ?1")
     List<DistrictDto> findByIdProvince(UUID provinceId);
+    @Query("select (count(d) > 0) from District d where d.id = :districtId and d.province.id = :provinceId")
+    Boolean isDistrictInProvince(@Param("districtId") UUID districtId, @Param("provinceId") UUID provinceId);
 }

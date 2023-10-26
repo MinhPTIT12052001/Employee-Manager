@@ -13,7 +13,7 @@ class UploadImage extends Component {
     imagePreviewUrl: '',
     imageArray: [],
     id: "upload-photo",
-    imageArray: [] /* Replace imageURI with an array for multiple images */
+    //imageArray: [] /* Replace imageURI with an array for multiple images */
 
   }
   handleFileUploadOnSelect = (event) => {

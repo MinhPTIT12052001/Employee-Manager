@@ -10,7 +10,6 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.UUID;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -22,9 +21,9 @@ public class EmployeeDto extends BaseObject{
     private String email;
     private String phone;
     private Integer age;
-//    private UUID provinceId;
-//    private UUID districtId;
-//    private UUID townId;
+    private UUID provinceId;
+    private UUID districtId;
+    private UUID townId;
 
     public EmployeeDto(Employee employee){
         if (!ObjectUtils.isEmpty(employee)){
@@ -34,9 +33,9 @@ public class EmployeeDto extends BaseObject{
             this.email = employee.getEmail();
             this.phone = employee.getPhone();
             this.age = employee.getAge();
-//            this.districtId = employee.getDistrict().getId();
-//            this.provinceId = employee.getProvince().getId();
-//            this.townId = employee.getTown().getId();
+            this.districtId = employee.getDistrict().getId();
+            this.provinceId = employee.getProvince().getId();
+            this.townId = employee.getTown().getId();
         }
     }
 }

@@ -10,6 +10,8 @@ import com.globits.da.repository.DistrictRepository;
 import com.globits.da.repository.EmployeeRepository;
 import com.globits.da.repository.ProvinceRepository;
 import com.globits.da.repository.TownRepository;
+import com.globits.da.validator.maker.OnCreate;
+import com.globits.da.validator.maker.OnUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -88,48 +90,70 @@ public class ValidationEmployee {
             throw new InvalidApiDataException(Collections.singletonList(apiDataError));
         }
     }
-//    public void checkProvinceIdValid(UUID provinceId){
-//        if (ObjectUtils.isEmpty(provinceId) || !provinceRepository.existsById(provinceId)){
-//            ApiDataError apiDataError = ApiDataError.builder()
-//                    .field(Const.EMPLOYEE_CONST.FIELD_PROVINCE)
-//                    .data(provinceId)
-//                    .message(MessageConst.EMPLOYEE_MESSAGE_ERROR.ID_NOT_EXIST)
-//                    .build();
-//            throw new InvalidApiDataException(Collections.singletonList(apiDataError));
-//        }
-//    }
-//    public void checkDistrictIdValid(UUID districtId){
-//        if (ObjectUtils.isEmpty(districtId) || !districtRepository.existsById(districtId)){
-//            ApiDataError apiDataError = ApiDataError.builder()
-//                    .field(Const.EMPLOYEE_CONST.FIELD_DISTRICT)
-//                    .data(districtId)
-//                    .message(MessageConst.EMPLOYEE_MESSAGE_ERROR.ID_NOT_EXIST)
-//                    .build();
-//            throw new InvalidApiDataException(Collections.singletonList(apiDataError));
-//        }
-//    }
-//    public void checkTownIdValid(UUID townId){
-//        if (ObjectUtils.isEmpty(townId) || !townRepository.existsById(townId)){
-//            ApiDataError apiDataError = ApiDataError.builder()
-//                    .field(Const.EMPLOYEE_CONST.FIELD_TOWN)
-//                    .data(townId)
-//                    .message(MessageConst.EMPLOYEE_MESSAGE_ERROR.ID_NOT_EXIST)
-//                    .build();
-//            throw new InvalidApiDataException(Collections.singletonList(apiDataError));
-//        }
-//    }
-    public void checkValidEmployee(EmployeeDto employeeDto) throws InvalidApiDataException{
+    public void checkProvinceIdValid(UUID provinceId){
+        if (ObjectUtils.isEmpty(provinceId) || !provinceRepository.existsById(provinceId)){
+            ApiDataError apiDataError = ApiDataError.builder()
+                    .field(Const.EMPLOYEE_CONST.FIELD_PROVINCE)
+                    .data(provinceId)
+                    .message(MessageConst.EMPLOYEE_MESSAGE_ERROR.ID_NOT_EXIST)
+                    .build();
+            throw new InvalidApiDataException(Collections.singletonList(apiDataError));
+        }
+    }
+    public void checkDistrictIdValid(UUID districtId){
+        if (ObjectUtils.isEmpty(districtId) || !districtRepository.existsById(districtId)){
+            ApiDataError apiDataError = ApiDataError.builder()
+                    .field(Const.EMPLOYEE_CONST.FIELD_DISTRICT)
+                    .data(districtId)
+                    .message(MessageConst.EMPLOYEE_MESSAGE_ERROR.ID_NOT_EXIST)
+                    .build();
+            throw new InvalidApiDataException(Collections.singletonList(apiDataError));
+        }
+    }
+    public void checkTownIdValid(UUID townId){
+        if (ObjectUtils.isEmpty(townId) || !townRepository.existsById(townId)){
+            ApiDataError apiDataError = ApiDataError.builder()
+                    .field(Const.EMPLOYEE_CONST.FIELD_TOWN)
+                    .data(townId)
+                    .message(MessageConst.EMPLOYEE_MESSAGE_ERROR.ID_NOT_EXIST)
+                    .build();
+            throw new InvalidApiDataException(Collections.singletonList(apiDataError));
+        }
+    }
+    private void checkDistrictBelongToProvince(UUID provinceId, UUID districtId) throws InvalidApiDataException{
+        if (!districtRepository.isDistrictInProvince(districtId,provinceId)){
+            ApiDataError apiDataError = ApiDataError.builder()
+                    .field(Const.EMPLOYEE_CONST.FIELD_DISTRICT)
+                    .message(MessageConst.EMPLOYEE_MESSAGE_ERROR.DISTRICT_NOT_BELONG_TO_PROVINCE)
+                    .build();
+            throw new InvalidApiDataException(Collections.singletonList(apiDataError));
+        }
+    }
+    private void checkTownBeLongToDistrict(UUID townId, UUID districtId) throws InvalidApiDataException{
+        if (!townRepository.isTownInDistrict(townId,districtId)){
+            ApiDataError apiDataError = ApiDataError.builder()
+                    .field(Const.EMPLOYEE_CONST.FIELD_TOWN)
+                    .message(MessageConst.EMPLOYEE_MESSAGE_ERROR.TOWN_NOT_BELONG_TO_DISTRICT)
+                    .build();
+            throw new InvalidApiDataException(Collections.singletonList(apiDataError));
+        }
+    }
+    public void checkValidEmployee(EmployeeDto employeeDto,Class<?> group) throws InvalidApiDataException{
         checkCodeValid(employeeDto.getCode());
         checkNameValid(employeeDto.getName());
         checkPhoneValid(employeeDto.getPhone());
         checkAgeValid(employeeDto.getAge());
         checkEmailValid(employeeDto.getEmail());
-//        if (!ObjectUtils.isEmpty(employeeDto.getProvinceId())
-//                && !ObjectUtils.isEmpty(employeeDto.getDistrictId())
-//                && !ObjectUtils.isEmpty(employeeDto.getTownId())){
-//            checkDistrictIdValid(employeeDto.getDistrictId());
-//            checkProvinceIdValid(employeeDto.getProvinceId());
-//            checkTownIdValid(employeeDto.getTownId());
-//        }
+        if(group.equals(OnCreate.class) ||
+                (group.equals(OnUpdate.class)
+                        && !ObjectUtils.isEmpty(employeeDto.getProvinceId())
+                        && !ObjectUtils.isEmpty(employeeDto.getDistrictId())
+                        && !ObjectUtils.isEmpty(employeeDto.getTownId()))) {
+            checkDistrictIdValid(employeeDto.getDistrictId());
+            checkProvinceIdValid(employeeDto.getProvinceId());
+            checkTownIdValid(employeeDto.getTownId());
+            checkDistrictBelongToProvince(employeeDto.getProvinceId(),employeeDto.getDistrictId());
+            checkTownBeLongToDistrict(employeeDto.getTownId(),employeeDto.getDistrictId());
+        }
     }
 }

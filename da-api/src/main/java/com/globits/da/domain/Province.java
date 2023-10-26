@@ -21,6 +21,8 @@ public class Province extends BaseObject {
     private String name;
     @OneToMany(mappedBy = "province", cascade = CascadeType.ALL)
     private List<District> districtList;
-//    @OneToMany(mappedBy = "province", cascade = CascadeType.ALL)
-//    private List<Employee> employeeList;
+    @OneToMany(mappedBy = "province", cascade = CascadeType.ALL)
+    private List<Employee> employeeList;
+    @OneToMany(mappedBy = "province",cascade = CascadeType.ALL)
+    private List<CertificateMap> certificateList;
 }

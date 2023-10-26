@@ -14,6 +14,7 @@ import org.springframework.util.ObjectUtils;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,12 +30,13 @@ public class CertificateDto extends BaseObject {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RegexConst.DATE_REGEX)
     private LocalDateTime expireDate;
 
+
     public CertificateDto(Certificate certificate){
         if (!ObjectUtils.isEmpty(certificate)){
             this.setId(certificate.getId());
             this.name = certificate.getName();
             this.beginDate = certificate.getBeginDate();
             this.expireDate = certificate.getExpireDate();
-        }
     }
+}
 }

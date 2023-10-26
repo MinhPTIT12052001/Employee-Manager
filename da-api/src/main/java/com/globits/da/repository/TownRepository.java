@@ -22,4 +22,7 @@ public interface TownRepository extends JpaRepository<Town, UUID> {
                           @Param("districtId") UUID districtId);
     @Query("select new com.globits.da.dto.TownDto(t) from Town t where t.district.id = ?1")
     List<TownDto> findByIdDistrict(UUID districtId);
+
+    @Query("select (count (t) > 0) from Town t where t.id = :townId and t.district.id = :districtId")
+    Boolean isTownInDistrict(@Param("townId") UUID townId, @Param("districtId") UUID districtId);
 }

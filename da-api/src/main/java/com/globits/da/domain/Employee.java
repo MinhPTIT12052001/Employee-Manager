@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,15 +33,16 @@ public class Employee extends BaseObject {
     @Column(name = "age")
     private Integer age;
 
-//    @ManyToOne()
-//    @JoinColumn(name = "province_id")
-//    private Province province;
-//
-//    @ManyToOne()
-//    @JoinColumn(name = "district_id")
-//    private District district;
-//
-//    @ManyToOne()
-//    @JoinColumn(name = "town_id")
-//    private Town town;
+    @ManyToOne()
+    @JoinColumn(name = "province_id")
+    private Province province;
+
+    @ManyToOne()
+    @JoinColumn(name = "district_id")
+    private District district;
+    @ManyToOne()
+    @JoinColumn(name = "town_id")
+    private Town town;
+    @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL)
+    private List<CertificateMap> certificateList;
 }

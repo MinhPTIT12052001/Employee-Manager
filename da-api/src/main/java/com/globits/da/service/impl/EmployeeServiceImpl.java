@@ -12,6 +12,8 @@ import com.globits.da.service.EmployeeService;
 import com.globits.da.utils.ConvertUtils;
 import com.globits.da.utils.HandlerExportExcelFile;
 import com.globits.da.validation.ValidationEmployee;
+import com.globits.da.validator.maker.OnCreate;
+import com.globits.da.validator.maker.OnUpdate;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,10 +43,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (ObjectUtils.isEmpty(employeeDto)){
             throw new RuntimeException();
         }
-        validationEmployee.checkValidEmployee(employeeDto);
+        validationEmployee.checkValidEmployee(employeeDto, OnCreate.class);
         Employee employee = new Employee();
-        convertUtils.setEmployeeValue(employee,employeeDto);
-        employeeRepository.save(employee);
+        convertUtils.setEmployeeValue(employee,employeeDto, OnCreate.class);
+        employee = employeeRepository.save(employee);
         return new EmployeeDto(employee);
     }
     @Override
@@ -58,10 +60,10 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new InvalidDtoException();
         }
         checkExistById(id);
-        validationEmployee.checkValidEmployee(employeeDto);
+        validationEmployee.checkValidEmployee(employeeDto, OnUpdate.class);
         Employee employee = employeeRepository.getOne(id);
-        convertUtils.setEmployeeValue(employee,employeeDto);
-        employeeRepository.save(employee);
+        convertUtils.setEmployeeValue(employee,employeeDto, OnUpdate.class);
+        employee = employeeRepository.save(employee);
         return new EmployeeDto(employee);
     }
     @Override

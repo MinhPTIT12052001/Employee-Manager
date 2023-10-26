@@ -33,4 +33,12 @@ public class Const {
         public static final String FIELD_ID = "ID";
         public static final String FIELD_NAME = "NAME";
     }
+
+    public static final class CERTIFICATE_MAPPING_CONST {
+        public static final int NUMBER_OF_CERTIFICATE_LIMIT = 3;
+        public static final String FIELD_ID = "ID";
+        public static final String FIELD_EMPLOYEE = "EMPLOYEE";
+        public static final String FIELD_PROVINCE = "PROVINCE";
+        public static final String FIELD_CERTIFICATE = "CERTIFICATE";
+    }
 }

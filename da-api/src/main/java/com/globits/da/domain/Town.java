@@ -24,6 +24,6 @@ public class Town extends BaseObject {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "district_id")
     private District district;
-//    @OneToMany(mappedBy = "town",cascade = CascadeType.ALL)
-//    private List<Employee> employeeList;
+    @OneToMany(mappedBy = "town",cascade = CascadeType.ALL)
+    private List<Employee> employeeList;
 }

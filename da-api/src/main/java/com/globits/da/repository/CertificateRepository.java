@@ -8,8 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
+
 @Repository
 public interface CertificateRepository extends JpaRepository<Certificate, UUID> {
-    @Query("select new com.globits.da.dto.CertificateDto(c) from Certificate c")
-    List<CertificateDto> getAllCertificate();
+    @Query("SELECT new com.globits.da.dto.CertificateDto(entity) FROM Certificate entity")
+    List<CertificateDto> getAll();
 }
